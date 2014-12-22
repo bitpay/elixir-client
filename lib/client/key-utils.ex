@@ -15,9 +15,9 @@ defmodule Client.KeyUtils do
   creates a base58 encoded SIN from a pem file
   """
   def get_sin_from_pem pem do
-    version = compressed_public_key(pem) |> 
-              set_version_type()
-    (version <> write_checksum version) |>
+    compressed_public_key(pem) |> 
+    set_version_type |>
+    (&(&1 <> write_checksum &1)).() |>
     encode_base58
   end
 
@@ -26,15 +26,18 @@ defmodule Client.KeyUtils do
   """
   def compressed_public_key pem do
     entity_from_pem(pem) |>
-    extract_key_pair |>
+    extract_coordinates |>
     compress_key
   end
 
   defp keys, do: :crypto.generate_key(:ecdh, :secp256k1)
 
   defp entity_from_keys({public, private}) do
-    private = :io_lib.format(private, [])
-    {:ECPrivateKey, 1, private, {:namedCurve, {1, 3, 132, 0, 10}}, {0, public}}
+    {:ECPrivateKey, 
+      1, 
+      :binary.bin_to_list(private), 
+      {:namedCurve, {1, 3, 132, 0, 10}}, 
+      {0, public}}
   end
 
   defp der_encode_entity(ec_entity), do: :public_key.der_encode(:ECPrivateKey, ec_entity)  
@@ -45,7 +48,7 @@ defmodule Client.KeyUtils do
     :public_key.der_decode(:ECPrivateKey, dncoded)
   end
     
-  defp extract_key_pair(ec_entity) do
+  defp extract_coordinates(ec_entity) do
     elem(ec_entity, 4) |>
     elem(1) |>
     Base.encode16 |>
@@ -63,25 +66,27 @@ defmodule Client.KeyUtils do
   defp return_compressed_key({x, y}) when Integer.is_odd(y),  do: "03#{x}"
 
   defp set_version_type public_key do
-    hash(public_key, :sha256) |> 
-    hash(:ripemd160) |>
+    digest(public_key, :sha256) |> 
+    digest(:ripemd160) |>
     (&("0F02" <> &1)).()
   end
 
   defp write_checksum version do
-    hash(version, :sha256) |> 
-    hash(:sha256) |>
+    digest(version, :sha256) |> 
+    digest(:sha256) |>
     String.slice(0..7)
   end
 
-  defp hash hex_val, encoding do
-    decoded = Base.decode16(hex_val) |> elem(1)
-    :crypto.hash(encoding, decoded) |> Base.encode16 
+  defp digest hex_val, encoding do
+    Base.decode16(hex_val) |> 
+    elem(1) |>
+    (&(:crypto.hash(encoding, &1))).() 
+    |> Base.encode16 
   end
 
   defp encode_base58 string do
-    number = String.to_integer(string, 16)
-    encode("", number, digit_list)
+    String.to_integer(string, 16) |>
+    (&(encode("", &1, digit_list))).()
   end
 
   defp digit_list do
@@ -90,7 +95,7 @@ defmodule Client.KeyUtils do
     List.to_tuple
   end
 
-  defp encode(output_string, number, list) when number <= 0, do: output_string
+  defp encode(output_string, number, _) when number <= 0, do: output_string
 
   defp encode(output_string, number, list) do
     elem(list, rem(number,58)) <> output_string |>
