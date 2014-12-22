@@ -1,6 +1,9 @@
 defmodule Client.KeyUtils do
   require Integer
 
+  @doc """
+  generates a pem file
+  """
   def generate_pem do
     keys |>
     entity_from_keys |>
@@ -8,6 +11,9 @@ defmodule Client.KeyUtils do
     pem_encode_der
   end
 
+  @doc """
+  creates a base58 encoded SIN from a pem file
+  """
   def get_sin_from_pem pem do
     version = compressed_public_key(pem) |> 
               set_version_type()
@@ -15,9 +21,15 @@ defmodule Client.KeyUtils do
     encode_base58
   end
 
-  ####
-  ## This section of code creates the pem file 
-  ## Start create_pem
+  @doc """
+  retrieves the compressed public key from a pem file
+  """
+  def compressed_public_key pem do
+    entity_from_pem(pem) |>
+    extract_key_pair |>
+    compress_key
+  end
+
   defp keys, do: :crypto.generate_key(:ecdh, :secp256k1)
 
   defp entity_from_keys({public, private}) do
@@ -27,19 +39,12 @@ defmodule Client.KeyUtils do
 
   defp der_encode_entity(ec_entity), do: :public_key.der_encode(:ECPrivateKey, ec_entity)  
   defp pem_encode_der(der_encoded), do: :public_key.pem_encode([{:ECPrivateKey, der_encoded, :not_encrypted}]) 
-  ## End create_pem
-  ####
 
-  ####
-  ## This section of code extracts the compressed public key from an ECPrivateKey entity
-  ## Start compressed_public_key
-  def compressed_public_key pem do
+  defp entity_from_pem pem do
     [{_, dncoded, _}] = :public_key.pem_decode(pem)
-    :public_key.der_decode(:ECPrivateKey, dncoded) |>
-    extract_key_pair |>
-    compress_key
+    :public_key.der_decode(:ECPrivateKey, dncoded)
   end
-
+    
   defp extract_key_pair(ec_entity) do
     elem(ec_entity, 4) |>
     elem(1) |>
@@ -56,11 +61,7 @@ defmodule Client.KeyUtils do
   defp convert_y_to_int({x, y}), do: ({x, String.to_integer(y, 16)})
   defp return_compressed_key({x, y}) when Integer.is_even(y), do: "02#{x}"
   defp return_compressed_key({x, y}) when Integer.is_odd(y),  do: "03#{x}"
-  ## End compressed_public_key
-  ####
 
-  ####
-  ## this section is concerned with creating the SIN
   defp set_version_type public_key do
     hash(public_key, :sha256) |> 
     hash(:ripemd160) |>
@@ -95,6 +96,4 @@ defmodule Client.KeyUtils do
     elem(list, rem(number,58)) <> output_string |>
     encode(div(number, 58), list)
   end
-  ## End of SIN section
-  ####
 end
