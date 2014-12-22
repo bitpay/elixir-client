@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/philosodad/bitpay-elixir.svg?branch=master)](https://travis-ci.org/philosodad/bitpay-elixir)
+
 # BitPay Library for Elixir
 Powerful, flexible, lightweight interface to the BitPay Bitcoin Payment Gateway API.
 
