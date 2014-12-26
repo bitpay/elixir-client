@@ -11,6 +11,7 @@ defmodule KeyUtilsTest do
   -----END EC PRIVATE KEY-----
   
   """
+  @private_key "283B13834DE77624696B80C29A2A8DF0287E3CCA23B26AD5FE77D9D5FED0EE90"
   test 'generate pem file generates a valid ec pem file' do
     pem = KeyUtils.generate_pem()
     assert Regex.match?(~r/BEGIN EC PRIVATE KEY.*\n.*\n.*\n.*\n.*END EC PRIVATE KEY/, pem) 
@@ -20,4 +21,9 @@ defmodule KeyUtilsTest do
     sin = KeyUtils.get_sin_from_pem @pem
     assert sin == @sin
   end
+
+  test 'get_private_key_from_pem' do
+    assert KeyUtils.private_key(@pem) == @private_key
+  end
+
 end

@@ -30,6 +30,16 @@ defmodule Client.KeyUtils do
     compress_key
   end
 
+  @doc """
+  retrieves the private key as a base16 string from the pem file
+  """
+  def private_key pem do
+    entity_from_pem(pem) |>
+    elem(2) |>
+    :binary.list_to_bin |>
+    Base.encode16
+  end
+
   defp keys, do: :crypto.generate_key(:ecdh, :secp256k1)
 
   defp entity_from_keys({public, private}) do
@@ -80,8 +90,8 @@ defmodule Client.KeyUtils do
   defp digest hex_val, encoding do
     Base.decode16(hex_val) |> 
     elem(1) |>
-    (&(:crypto.hash(encoding, &1))).() 
-    |> Base.encode16 
+    (&(:crypto.hash(encoding, &1))).() |>
+    Base.encode16
   end
 
   defp encode_base58 string do
@@ -89,16 +99,15 @@ defmodule Client.KeyUtils do
     (&(encode("", &1, digit_list))).()
   end
 
+  defp encode(output_string, number, _list) when number <= 0, do: output_string
+  defp encode(output_string, number, list) do
+    elem(list, rem(number,58)) <> output_string |>
+    encode(div(number, 58), list)
+  end
+
   defp digit_list do
     "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz" |>
     String.split("") |>
     List.to_tuple
-  end
-
-  defp encode(output_string, number, _) when number <= 0, do: output_string
-
-  defp encode(output_string, number, list) do
-    elem(list, rem(number,58)) <> output_string |>
-    encode(div(number, 58), list)
   end
 end
