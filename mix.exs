@@ -2,7 +2,7 @@ defmodule Client.Mixfile do
   use Mix.Project
 
   def project do
-    [app: :client,
+    [app: :bitpay,
      version: "0.0.1",
      elixir: "~> 1.0",
      deps: deps]
@@ -25,6 +25,6 @@ defmodule Client.Mixfile do
   #
   # Type `mix help deps` for more examples and options
   defp deps do
-    []
+    [{:mock, "~> 0.1.0", only: :test}]
   end
 end

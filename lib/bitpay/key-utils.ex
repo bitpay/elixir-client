@@ -1,4 +1,4 @@
-defmodule Client.KeyUtils do
+defmodule BitPay.KeyUtils do
   require Integer
 
   @doc """
@@ -99,7 +99,7 @@ defmodule Client.KeyUtils do
     (&(encode("", &1, digit_list))).()
   end
 
-  defp encode(output_string, number, _list) when number <= 0, do: output_string
+  defp encode(output_string, number, _list) when number == 0, do: output_string
   defp encode(output_string, number, list) do
     elem(list, rem(number,58)) <> output_string |>
     encode(div(number, 58), list)

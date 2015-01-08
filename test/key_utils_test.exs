@@ -1,6 +1,6 @@
 defmodule KeyUtilsTest do
   use ExUnit.Case
-  alias Client.KeyUtils, as: KeyUtils
+  alias BitPay.KeyUtils, as: KeyUtils
 
   @sin "TeyN4LPrXiG5t2yuSamKqP3ynVk3F52iHrX"
   @pem """
