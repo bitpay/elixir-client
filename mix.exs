@@ -12,7 +12,7 @@ defmodule Client.Mixfile do
   #
   # Type `mix help compile.app` for more information
   def application do
-    [applications: [:logger]]
+    [applications: [:logger, :httpotion, :exjsx, :webdriver, :uuid]]
   end
 
   # Dependencies can be Hex packages:
@@ -25,6 +25,11 @@ defmodule Client.Mixfile do
   #
   # Type `mix help deps` for more examples and options
   defp deps do
-    [{:mock, "~> 0.1.0", only: :test}]
+    [{ :mock, "~> 0.1.0", only: :test }, 
+     { :ibrowse, github: "cmullaparthi/ibrowse", tag: "v4.1.0" },
+     { :httpotion, "~> 1.0.0" }, 
+     { :exjsx, "~> 3.1.0" },
+     { :webdriver, github: "atlantaelixir/elixir-webdriver", tag: "v0.7.2" },
+     { :uuid, "~> 0.1.5" }]
   end
 end
