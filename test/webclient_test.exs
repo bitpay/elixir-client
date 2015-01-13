@@ -10,7 +10,7 @@ defmodule WebClientTest do
   end
 
   test 'pairing handles errors gracefully' do
-      with_mock HTTPotion, [post: fn("https://bitpay.com", _body) ->
+      with_mock HTTPotion, [post: fn("https://bitpay.com/tokens", _body, _headers) ->
                           %HTTPotion.Response{status_code: 403,
                                               body: "{\n  \"error\": \"this is a 403 error\"\n}"} end] do
       assert_raise BitPay.BitPayError, "403: this is a 403 error", fn() ->  WebClient.pair_pos_client "aBD3fhg" end
