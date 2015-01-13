@@ -10,8 +10,6 @@ defmodule BitPay.WebClient do
   def pair_pos_client code, true, client do
     response = pair_with_server code, client 
     success = HTTPotion.Response.success? response
-    IO.puts response.status_code
-    IO.puts success
     process_pairing response.body, response.status_code, response.headers, success
   end
 
@@ -38,8 +36,6 @@ defmodule BitPay.WebClient do
     sin = KeyUtils.get_sin_from_pem(webclient.pem)
     body = JSX.encode(["pairingCode": code, "id": sin]) |>
            elem(1)
-    IO.puts uri
-    IO.puts body
     HTTPotion.post(uri, body, ["content-type": "application/json", "accept": "application/json", "X-accept-version": "2.0.0"])
   end
 end
