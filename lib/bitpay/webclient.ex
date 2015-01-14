@@ -7,15 +7,14 @@ defmodule BitPay.WebClient do
     pair_pos_client code, (code =~ ~r/^\p{Xan}{7}$/), client
   end
 
-  def pair_pos_client code, true, client do
+  defp pair_pos_client code, true, client do
     response = pair_with_server code, client 
     success = HTTPotion.Response.success? response
     process_pairing response.body, response.status_code, response.headers, success
   end
 
-  def pair_pos_client code, false, _client do
-    raise BitPay.ArgumentError, message: "pairing code is not legal"
-  end
+  defp pair_pos_client(_code, false, _client),
+    do: raise(BitPay.ArgumentError, message: "pairing code is not legal")
 
   defp process_pairing body, _status, _headers, true do
     data = (JSX.decode(body) |> 
@@ -23,7 +22,7 @@ defmodule BitPay.WebClient do
            List.first
     token = data["token"]
     facade = String.to_atom(data["facade"])
-    %{facade: token}
+    Dict.put(%{}, facade, token)
   end
 
   defp process_pairing body, status, _headers, false do   

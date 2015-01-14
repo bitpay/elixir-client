@@ -11,7 +11,9 @@ defmodule KeyUtilsTest do
   -----END EC PRIVATE KEY-----
   
   """
+
   @private_key "283B13834DE77624696B80C29A2A8DF0287E3CCA23B26AD5FE77D9D5FED0EE90"
+
   test 'generate pem file generates a valid ec pem file' do
     pem = KeyUtils.generate_pem()
     assert Regex.match?(~r/BEGIN EC PRIVATE KEY.*\n.*\n.*\n.*\n.*END EC PRIVATE KEY/, pem) 
@@ -26,4 +28,10 @@ defmodule KeyUtilsTest do
     assert KeyUtils.private_key(@pem) == @private_key
   end
 
+  test 'sign' do
+    signature_decoded = KeyUtils.sign("this land is your land", @pem) |> Base.decode16 |> elem(1)
+    public_key = :public_key.pem_decode(@pem) |> List.first |> :public_key.pem_entry_decode |> elem(4) |> elem(1)
+    verify = :crypto.verify(:ecdsa, :sha256, "this land is your land", signature_decoded, [public_key, :secp256k1])
+    assert verify
+  end
 end

@@ -6,8 +6,15 @@ defmodule PairingTest do
     claimcode = get_code_from_server
     client = %WebClient{uri: "https://test.bitpay.com"}
     token = WebClient.pair_pos_client claimcode, client
-    assert String.length(token.facade) > 0 
+    assert String.length(token.pos) > 0 
   end
+
+  #  test 'creates an invoice' do
+  #    claimcode = get_code_from_server
+  #    client = %WebClient{uri: "https://test.bitpay.com"}
+  #    token = WebClient.pair_pos_client claimcode, client
+  #
+  #  end
 
   defp get_code_from_server do
     WebDriver.sessions |> Enum.map(&(WebDriver.stop_session(&1)))

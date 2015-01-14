@@ -40,6 +40,17 @@ defmodule BitPay.KeyUtils do
     Base.encode16
   end
 
+  @doc """
+  signs the input with the key retrieved from the pem file
+  """
+  def sign payload, pem do
+    entity = :public_key.pem_decode(pem) |>
+             List.first |>
+             :public_key.pem_entry_decode
+    :public_key.sign(payload, :sha256, entity) |>
+             Base.encode16
+  end
+
   defp keys, do: :crypto.generate_key(:ecdh, :secp256k1)
 
   defp entity_from_keys({public, private}) do
