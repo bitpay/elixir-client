@@ -17,7 +17,14 @@ defmodule PairingTest do
 
   test 'creates an invoice' do
     root_url = System.get_env("RCROOTADDRESS")
-    pem = String.replace(System.get_env("RCPEM"), "\\n", "\n")
+    pem = """
+    -----BEGIN EC PRIVATE KEY-----
+    MHQCAQEEIM+l0RPpTUHs1Ivmk79i145HH3cD3V9fpw1R+FYVzT2BoAcGBSuBBAAK
+    oUQDQgAEauhYqfimOl1dE7s9v/mGt005CumaO8Fi7HB3Lk4NqTgL6z6N7A/VRTYI
+    qvRiwS3zXYueL9nTvGQJdS0MKMgz1g==
+    -----END EC PRIVATE KEY-----
+    
+    """
     set_token = System.get_env("RCTOKEN")
     if(is_nil(pem) || is_nil(set_token) || is_nil(root_url)) do
       raise ArgumentError, message: "Please set the system variables"
