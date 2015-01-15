@@ -17,6 +17,16 @@ defmodule WebClientTest do
     end
   end
 
+  test "create invoice fails gracefully with improper price" do
+      params = %{price: "100,00", currency: "USD", token: "anything"}
+      assert_raise BitPay.ArgumentError, "Illegal Argument: Price must be formatted as a float", fn() -> WebClient.create_invoice(params, %BitPay.WebClient{}) end
+  end
+  test "create invoice fails gracefully with improper currency" do
+      params = %{price: "100.00", currency: "USDa", token: "anything"}
+      assert_raise BitPay.ArgumentError, "Illegal Argument: Currency is invalid.", fn() -> WebClient.create_invoice(params, %BitPay.WebClient{}) end
+  end
+  #        raise BitPay::ArgumentError, "Illegal Argument: Price must be formatted as a float" unless ( price.is_a?(Numeric) || /^[[:digit:]]+(\.[[:digit:]]{2})?$/.match(price) )
+  #        raise BitPay::ArgumentError, "Illegal Argument: Currency is invalid." unless /^[[:upper:]]{3}$/.match(currency)                                                        
   defp illegal_pairing_codes do
     ["abcdefgh", "habcdefg", "abcd-fg"]
   end

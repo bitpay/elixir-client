@@ -1,0 +1,13 @@
+#!/bin/bash
+
+export RCROOTADDRESS=$1
+echo $RCROOTADDRESS
+export RCTESTUSER=$2
+echo $RCTESTUSER
+export RCTESTPASSWORD=$3
+echo $RCTESTPASSWORD
+export RCPEM=$4
+echo $RCPEM
+export RCTOKEN=$5
+echo $RCTOKEN
+
