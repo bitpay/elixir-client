@@ -5,8 +5,11 @@ Powerful, flexible, lightweight interface to the BitPay Bitcoin Payment Gateway 
 
 ## Installation
 
-using hex:
-## Configuration
+using hex, add to mixfile:
+ { :bitpay, "~> 0.0.1" }
+
+otherwise: 
+ { :bitpay, github: "bitpay/elixir-client", tag: "v0.0.1" }
 
 ## Basic Usage
 

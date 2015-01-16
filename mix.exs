@@ -41,6 +41,7 @@ defmodule Client.Mixfile do
       licenses: ["MIT"],
       links: %{"GitHub" => "https://github.com/bitpay/elixir-client"}]
   end
+
   defp deps do
     [{ :mock, "~> 0.1.0", only: :test }, 
      { :ibrowse, github: "cmullaparthi/ibrowse", tag: "v4.1.0" },
