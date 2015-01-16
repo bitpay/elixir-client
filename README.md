@@ -5,6 +5,7 @@ Powerful, flexible, lightweight interface to the BitPay Bitcoin Payment Gateway 
 
 ## Installation
 
+using hex:
 ## Configuration
 
 ## Basic Usage
