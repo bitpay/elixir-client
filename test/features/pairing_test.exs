@@ -8,30 +8,19 @@ defmodule PairingTest do
     if(is_nil(root_url)) do
       raise ArgumentError, message: "Please set the system variables"
     else
-      claimcode = get_code_from_server
-      client = %WebClient{uri: root_url}
-      token = WebClient.pair_pos_client claimcode, client
+      token = pair_with_server(root_url)
       assert String.length(token.pos) > 0 
     end
   end
 
   test 'creates an invoice' do
     root_url = System.get_env("RCROOTADDRESS")
-    pem = """
-    -----BEGIN EC PRIVATE KEY-----
-    MHQCAQEEIM+l0RPpTUHs1Ivmk79i145HH3cD3V9fpw1R+FYVzT2BoAcGBSuBBAAK
-    oUQDQgAEauhYqfimOl1dE7s9v/mGt005CumaO8Fi7HB3Lk4NqTgL6z6N7A/VRTYI
-    qvRiwS3zXYueL9nTvGQJdS0MKMgz1g==
-    -----END EC PRIVATE KEY-----
-    
-    """
-    set_token = System.get_env("RCTOKEN")
+    {pem, set_token} = set_or_get_pem_and_token(root_url)
     if(is_nil(pem) || is_nil(set_token) || is_nil(root_url)) do
       raise ArgumentError, message: "Please set the system variables"
     else
-      client = %WebClient{uri: System.get_env("RCROOTADDRESS"), pem: pem}
-      token = %{pos: System.get_env("RCTOKEN")}
-      params = %{price: 100, currency: "USD", token: token.pos}
+      client = %WebClient{uri: root_url, pem: pem}
+      params = %{ price: 100, currency: "USD", token: set_token.pos }
       invoice = WebClient.create_invoice(params, client) 
       assert invoice.status == "new"
     end
@@ -42,6 +31,35 @@ defmodule PairingTest do
     client = %WebClient{uri: "https://test.bitpay.com"}
     invoice = WebClient.get_invoice(invoice_id, client)
     assert invoice.id == invoice_id
+  end
+
+  defp pair_with_server(root_url) do
+    pem = KeyUtils.generate_pem
+    pair_with_server root_url, pem
+  end
+
+  defp pair_with_server(root_url, pem) do
+    claimcode = get_code_from_server
+    client = %WebClient{uri: root_url, pem: pem}
+    WebClient.pair_pos_client claimcode, client
+  end
+
+  defp set_or_get_pem_and_token(root_url) do
+    user_home = Path.expand("~")
+    pem_path = user_home <> "/.bitpay/bitpay.pem"
+    token_path = user_home <> "/.bitpay/tokens.json"
+    if(File.exists?(pem_path) && File.exists?(token_path)) do
+      pem = File.read(pem_path) |> elem(1)
+      set_token = File.read(token_path) |> elem(1) |>
+                  JSX.decode([{:labels, :atom}]) |> elem(1)
+    else
+      pem = KeyUtils.generate_pem
+      set_token = pair_with_server(root_url, pem)
+      File.write(pem_path, pem)
+      token_json = JSX.encode(set_token) |> elem(1)
+      File.write(token_path, token_json)
+    end
+    {pem, set_token}
   end
 
   defp get_code_from_server do
@@ -76,7 +94,7 @@ defmodule PairingTest do
       WebDriver.Element.displayed? form
       WebDriver.Element.submit( form )
       claimcode = WebDriver.Session.element( :session, :css, ".token-claimcode" ) |>
-                  WebDriver.Element.text
+      WebDriver.Element.text
       WebDriver.sessions |> Enum.map(&(WebDriver.stop_session(&1)))
       WebDriver.stop_all_browsers
       claimcode
