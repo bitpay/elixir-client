@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/philosodad/bitpay-elixir.svg?branch=master)](https://travis-ci.org/philosodad/bitpay-elixir)
+[![Build Status](https://travis-ci.org/bitpay/elixir-client.svg?branch=master)](https://travis-ci.org/bitpay/elixir-client)
 
 # BitPay Library for Elixir or Erlang
 Powerful, flexible, lightweight interface to the BitPay Bitcoin Payment Gateway API. Can be used in an Elixir project or directly in an Erlang project as described in the [Elixir Crash Course](http://elixir-lang.org/crash-course.html). This README assumes that you are using Elixir.
