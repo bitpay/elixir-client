@@ -15,7 +15,6 @@ The bitpay library allows authenticating with BitPay, creating invoices, and ret
 
 Before pairing with BitPay.com, you'll need to log in to your BitPay account and navigate to /api-tokens. Generate a new pairing code and use it in the next step.
 
-    :::iex
     > pem = BitPay.KeyUtils.generate_pem
     > webclient = %BitPay.WebClient{pem: pem}
     > token = BitPay.WebClient.pair_pos_client(pairingcode, webclient) 
@@ -26,7 +25,6 @@ You'll need to know the pem file and the token in order to create invoices.
 
 Assuming that you have both a token and a pem file as shown in the last step:
 
-    :::iex
     > webclient = %BitPay.WebClient{pem: pem}
     > params = %{price: 100, currency: "USD", token: token}
     > invoice = BitPay.WebClient.create_invoice(params, webclient)
@@ -46,11 +44,10 @@ API Documentation is available on the [BitPay site](https://bitpay.com/api).
 
 Before running the tests, get a test.bitpay.com account. On Mac or Linux systems, set your system variables using the `set_constants` shell file in the test directory.
 
-    $ mkdir ~/.bitpay
     $ source ./test/set_constants.sh https://test.bitpay.com <youremail> <yourpassword>
     $ mix test
 
-The tests will attempt to create two files in a folder in your home (~) directory. This will fail if there is no directory called ".bitpay" in your home directory, so create one ahead of time. This saves a pem file and token, which keeps the tests from having to pair twice every time they run, speeding up testing and avoiding BitPays token creation rate limiter. If you revoke the tokens or want a clean run, delete the files in this directory.
+The tests will attempt to create two files and a folder called `.bitpay` in your home (~) directory. This saves a pem file and token, which keeps the tests from having to pair twice every time they run, speeding up testing and avoiding BitPays token creation rate limiter. If you revoke the tokens or want a clean run, delete the files in this directory.
 
 ## Found a bug?
 Let us know! Send a pull request or a patch. Questions? Ask! We're here to help. We will respond to all filed issues.

@@ -55,8 +55,9 @@ defmodule PairingTest do
     else
       pem = KeyUtils.generate_pem
       set_token = pair_with_server(root_url, pem)
-      File.write(pem_path, pem)
       token_json = JSX.encode(set_token) |> elem(1)
+      File.mkdir(user_home <> "/.bitpay")
+      File.write(pem_path, pem)
       File.write(token_path, token_json)
     end
     {pem, set_token}
