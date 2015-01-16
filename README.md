@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/philosodad/bitpay-elixir.svg?branch=master)](https://travis-ci.org/philosodad/bitpay-elixir)
 
-# BitPay Library for Elixir
-Powerful, flexible, lightweight interface to the BitPay Bitcoin Payment Gateway API.
+# BitPay Library for Elixir or Erlang
+Powerful, flexible, lightweight interface to the BitPay Bitcoin Payment Gateway API. Can be used in an Elixir project or directly in an Erlang project as described in the [Elixir Crash Course](http://elixir-lang.org/crash-course.html). This README assumes that you are using Elixir.
 
 ## Installation
 
@@ -13,27 +13,27 @@ The bitpay library allows authenticating with BitPay, creating invoices, and ret
   
 ### Pairing with Bitpay.com
 
-Before pairing with BitPay.com, you'll need to log in to your BitPay account and navigate to /api-tokens. Generate a new pairing code and use it in the next step.
+Before pairing with BitPay.com, you'll need to log in to your BitPay account and navigate to /api-tokens. Generate a new pairing code and use it in the next step. If you want to test against 
 
     > pem = BitPay.KeyUtils.generate_pem
-    > webclient = %BitPay.WebClient{pem: pem}
+    > webclient = %BitPay.WebClient{pem: pem} #or %BitPay.WebClient{pem: pem, uri: "https://test.bitpay.com"}
     > token = BitPay.WebClient.pair_pos_client(pairingcode, webclient) 
 
 You'll need to know the pem file and the token in order to create invoices.
 
 ### To create an invoice with a paired client:
 
-Assuming that you have both a token and a pem file as shown in the last step:
+Assuming that you have both a token object and a webclient as shown in the last step:
 
     > webclient = %BitPay.WebClient{pem: pem}
-    > params = %{price: 100, currency: "USD", token: token}
+    > params = %{price: 100, currency: "USD", token: token.pos}
     > invoice = BitPay.WebClient.create_invoice(params, webclient)
 
 That will return a map representing the invoice, and create an invoice on BitPays servers. Other parameters can be sent, see the [BitPay REST API documentation](https://bitpay.com/api#resource-Invoices) for details.
 
 ## Testnet Usage
 
-  To use testnet, add a uri parameter when creating the webclient struct `%BitPay.WebClient{uri: "https://test.bitpay.net"}`
+  To use testnet, add a uri parameter when creating the webclient struct `%BitPay.WebClient{uri: "https://test.bitpay.com"}`
   
 
 ## API Documentation
@@ -42,7 +42,9 @@ API Documentation is available on the [BitPay site](https://bitpay.com/api).
 
 ## Running the Tests
 
-Before running the tests, get a test.bitpay.com account. On Mac or Linux systems, set your system variables using the `set_constants` shell file in the test directory.
+The tests depend on a custom fork of elixir-webdriver and require that you have phantomjs installed.
+
+Before running the tests, get a test.bitpay.com account. On Mac or Linux systems, set your system variables using the `set_constants` shell file in the test directory. 
 
     $ source ./test/set_constants.sh https://test.bitpay.com <youremail> <yourpassword>
     $ mix test
