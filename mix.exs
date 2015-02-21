@@ -5,6 +5,8 @@ defmodule Client.Mixfile do
     [app: :bitpay,
      version: "0.0.1",
      elixir: "~> 1.0",
+     description: description,
+     package: package,
      deps: deps]
   end
 
@@ -24,6 +26,22 @@ defmodule Client.Mixfile do
   #   {:mydep, git: "https://github.com/elixir-lang/mydep.git", tag: "0.1.0"}
   #
   # Type `mix help deps` for more examples and options
+  defp description do
+    """
+    Library to allow elixir apps to easily use the BitPay REST API to authenticate, generate invoices, and retrieve invoices.
+
+    Includes Utilities for using Erlangs library for Elliptic Curve Keys.
+    """
+  end
+
+  defp package do
+    [# These are the default files included in the package
+      files: ["lib", "mix.exs", "README*", "readme*", "LICENSE*", "license*"],
+      contributors: ["Paul Daigle"],
+      licenses: ["MIT"],
+      links: %{"GitHub" => "https://github.com/bitpay/elixir-client"}]
+  end
+
   defp deps do
     [{ :mock, "~> 0.1.0", only: :test }, 
      { :ibrowse, github: "cmullaparthi/ibrowse", tag: "v4.1.0" },
