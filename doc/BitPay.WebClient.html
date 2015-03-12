@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>BitPay.WebClient</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8" />
+    <link rel="stylesheet" href="css/elixir.css" type="text/css" media="screen" charset="utf-8" />
+    <script type="text/javascript" charset="utf-8">
+      relpath = '';
+      if (relpath != '') relpath += '/';
+    </script>
+
+    <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+    <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+    <script type="text/javascript" charset="utf-8" src="js/highlight.pack.js"></script>
+    <script type="text/javascript" charset="utf-8">
+      hljs.initHighlightingOnLoad();
+      hljs.configure({languages: []}); //disable autodetect
+    </script>
+  </head>
+
+  <body>
+    <script type="text/javascript" charset="utf-8">
+      if (window.top.frames.main) document.body.className = 'frames';
+    </script>
+
+    <section id="content">
+      <div class="breadcrumbs">bitpay v0.0.1 &rarr; <a href="overview.html">Overview</a> &rarr; <a href="BitPay.html">BitPay</a> &rarr; <a href="BitPay.WebClient.html">WebClient</a></div>
+      <h1>
+        BitPay.WebClient
+        
+      </h1>
+
+      <ul class="summary_links">
+        
+          <li><a href="#summary">Summary</a></li>
+        
+        
+        
+          <li><a href="#functions_details">Functions</a></li>
+        
+        
+        
+      </ul>
+
+      
+        <section id="moduledoc" class="docstring">
+          <p>Convenience methods for the BitPay REST API.</p>
+
+        </section>
+      
+
+      
+
+      
+        <h2 id="summary">Summary<span class="detail_header_links"><a class="to_top_link" href="#content" title="To the top of the page">&uarr;</a></span></h2>
+        <table class="summary">
+          <tr>
+  <td class="summary_signature"><a href="#__struct__/0">__struct__()</a></td>
+  
+    <td class="summary_synopsis"><p>The module struct contains two fields:</p>
+</td>
+  
+</tr>
+<tr>
+  <td class="summary_signature"><a href="#create_invoice/2">create_invoice(params, webclient)</a></td>
+  
+    <td class="summary_synopsis"><p>Sends a post request to the server that creates a new invoice</p>
+</td>
+  
+</tr>
+<tr>
+  <td class="summary_signature"><a href="#get_invoice/2">get_invoice(id, webclient)</a></td>
+  
+    <td class="summary_synopsis"><p>Retrieves an invoice from the BitPay server</p>
+</td>
+  
+</tr>
+<tr>
+  <td class="summary_signature"><a href="#pair_pos_client/2">pair_pos_client(code, client \\ %BitPay.WebClient{})</a></td>
+  
+    <td class="summary_synopsis"><p>creates a token on the server corresponding to the WebClients public and private keys</p>
+</td>
+  
+</tr>
+
+        </table>
+      
+
+      
+
+      
+        <section id="functions_details" class="details_list">
+          <h2>Functions</h2>
+          <section class="detail">
+  <div class="detail_header" id="__struct__/0">
+    <span class="signature"><strong>__struct__()</strong></span>
+    <div class="detail_header_links">
+      <span class="detail_type">(function)</span>
+      <a href="#__struct__/0" class="detail_link" title="Link to this function">#</a>
+      <a class="to_top_link" href="#content" title="To the top of the page">&uarr;</a>
+    </div>
+  </div>
+  
+    <p>Specs:</p>
+    <ul class="spec">
+      
+        <li>__struct__ :: %BitPay.WebClient{pem: term, uri: term}</li>
+      
+    </ul>
+  
+  <section class="docstring">
+    <p>The module struct contains two fields:</p>
+<ul>
+<li>uri: the api uri, which defaults to <a href="https://bitpay.com">https://bitpay.com</a>
+</li>
+<li>pem: a pem file containing the public and private keys, which can be generated from the BitPay.KeyUtils module.
+</li>
+</ul>
+
+  </section>
+  
+</section>
+<section class="detail">
+  <div class="detail_header" id="create_invoice/2">
+    <span class="signature"><strong>create_invoice(params, webclient)</strong></span>
+    <div class="detail_header_links">
+      <span class="detail_type">(function)</span>
+      <a href="#create_invoice/2" class="detail_link" title="Link to this function">#</a>
+      <a class="to_top_link" href="#content" title="To the top of the page">&uarr;</a>
+    </div>
+  </div>
+  
+  <section class="docstring">
+    <p>Sends a post request to the server that creates a new invoice.</p>
+<p>Input: </p>
+<ul>
+<li>a params map that must contain a price and a currency
+</li>
+<li>a WebClient struct. The web client struct must be paired with BitPay.
+</li>
+</ul>
+<p>Response: A map corresponding to the data section of the JSON response from the server.</p>
+
+  </section>
+  
+</section>
+<section class="detail">
+  <div class="detail_header" id="get_invoice/2">
+    <span class="signature"><strong>get_invoice(id, webclient)</strong></span>
+    <div class="detail_header_links">
+      <span class="detail_type">(function)</span>
+      <a href="#get_invoice/2" class="detail_link" title="Link to this function">#</a>
+      <a class="to_top_link" href="#content" title="To the top of the page">&uarr;</a>
+    </div>
+  </div>
+  
+  <section class="docstring">
+    <p>Retrieves an invoice from the BitPay server.</p>
+<p>Input:</p>
+<ul>
+<li>an invoice id
+</li>
+<li>a WebClient
+</li>
+</ul>
+<p>Response:
+  a map corresponding to the data section of the JSON response from the server.</p>
+
+  </section>
+  
+</section>
+<section class="detail">
+  <div class="detail_header" id="pair_pos_client/2">
+    <span class="signature"><strong>pair_pos_client(code, client \\ %BitPay.WebClient{})</strong></span>
+    <div class="detail_header_links">
+      <span class="detail_type">(function)</span>
+      <a href="#pair_pos_client/2" class="detail_link" title="Link to this function">#</a>
+      <a class="to_top_link" href="#content" title="To the top of the page">&uarr;</a>
+    </div>
+  </div>
+  
+  <section class="docstring">
+    <p>creates a token on the server corresponding to the WebClients public and private keys</p>
+<p>Input:</p>
+<ul>
+<li>a pairing code from the server
+</li>
+<li>a WebClient
+</li>
+</ul>
+<p>Response: a key/value pair such as <code class="inline">%{pos: 92hgkeit92392gjgj}</code></p>
+
+  </section>
+  
+</section>
+
+        </section>
+      
+
+      
+
+      
+    </section>
+  </body>
+</html>

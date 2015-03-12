@@ -30,6 +30,8 @@ defmodule Client.Mixfile do
      { :httpotion, "~> 1.0.0" }, 
      { :exjsx, "~> 3.1.0" },
      { :webdriver, github: "atlantaelixir/elixir-webdriver", tag: "v0.7.2" },
-     { :uuid, "~> 0.1.5" }]
+     { :uuid, "~> 0.1.5" },
+     { :earmark, "~> 0.1", only: :dev },
+     {:ex_doc, "~> 0.7", only: :dev}]
   end
 end

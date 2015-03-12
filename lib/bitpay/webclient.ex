@@ -1,13 +1,41 @@
 defmodule BitPay.WebClient do
+  @moduledoc """
+  Convenience methods for the BitPay REST API.
+  """
   require IEx
   alias BitPay.KeyUtils, as: KeyUtils
+  @doc """
+  The module struct contains two fields:
+
+    - uri: the api uri, which defaults to https://bitpay.com
+    - pem: a pem file containing the public and private keys, which can be generated from the BitPay.KeyUtils module.
+  """
   defstruct uri: "https://bitpay.com", pem: KeyUtils.generate_pem
 
+  @doc """
+  creates a token on the server corresponding to the WebClients public and private keys
+
+  Input:
+
+    * a pairing code from the server
+    * a WebClient
+
+  Response: a key/value pair such as `%{pos: 92hgkeit92392gjgj}`
+  """
   def pair_pos_client code, client \\ %BitPay.WebClient{} do
     pair_pos_client code, (code =~ ~r/^\p{Xan}{7}$/), client
   end
 
+  @doc """
+  Sends a post request to the server that creates a new invoice.
 
+  Input: 
+    
+   * a params map that must contain a price and a currency
+   * a WebClient struct. The web client struct must be paired with BitPay.
+
+  Response: A map corresponding to the data section of the JSON response from the server.
+  """
   def create_invoice params, webclient do
     validate_invoice_args params.price, params.currency
     uri = webclient.uri <> "/invoices"
@@ -18,6 +46,17 @@ defmodule BitPay.WebClient do
     process_invoice response.body, response.status, response.success
   end
 
+  @doc """
+  Retrieves an invoice from the BitPay server.
+
+  Input:
+
+    * an invoice id
+    * a WebClient
+
+  Response:
+    a map corresponding to the data section of the JSON response from the server.
+  """
   def get_invoice(id, webclient) do
     uri = webclient.uri <> "/invoices/" <> id
     response = HTTPotion.get(uri) |>
