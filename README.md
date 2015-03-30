@@ -1,11 +1,15 @@
-[![Build Status](https://travis-ci.org/philosodad/bitpay-elixir.svg?branch=master)](https://travis-ci.org/philosodad/bitpay-elixir)
+[![Build Status](https://travis-ci.org/philosodad/bitpay-elixir.svg?branch=master)](https://travis-ci.org/philosodad/bitpay-elixir) [![Hex Package](https://img.shields.io/badge/hexpm-v0.0.1-plug.svg)](https://hex.pm/packages/bitpay)
 
 # BitPay Library for Elixir or Erlang
 Powerful, flexible, lightweight interface to the BitPay Bitcoin Payment Gateway API. Can be used in an Elixir project or directly in an Erlang project as described in the [Elixir Crash Course](http://elixir-lang.org/crash-course.html). This README assumes that you are using Elixir.
 
 ## Installation
 
-## Configuration
+using hex, add to mixfile:
+ { :bitpay, "~> 0.0.1" }
+
+otherwise: 
+ { :bitpay, github: "bitpay/elixir-client", tag: "v0.0.1" }
 
 ## Basic Usage
 
