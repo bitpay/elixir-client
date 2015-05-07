@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>BitPay.KeyUtils</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="css/style.css" type="text/css" media="screen" charset="utf-8" />
+    <link rel="stylesheet" href="css/elixir.css" type="text/css" media="screen" charset="utf-8" />
+    <script type="text/javascript" charset="utf-8">
+      relpath = '';
+      if (relpath != '') relpath += '/';
+    </script>
+
+    <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+    <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+    <script type="text/javascript" charset="utf-8" src="js/highlight.pack.js"></script>
+    <script type="text/javascript" charset="utf-8">
+      hljs.initHighlightingOnLoad();
+      hljs.configure({languages: []}); //disable autodetect
+    </script>
+  </head>
+
+  <body>
+    <script type="text/javascript" charset="utf-8">
+      if (window.top.frames.main) document.body.className = 'frames';
+    </script>
+
+    <section id="content">
+      <div class="breadcrumbs">bitpay v0.0.1 &rarr; <a href="overview.html">Overview</a> &rarr; <a href="BitPay.html">BitPay</a> &rarr; <a href="BitPay.KeyUtils.html">KeyUtils</a></div>
+      <h1>
+        BitPay.KeyUtils
+        
+      </h1>
+
+      <ul class="summary_links">
+        
+          <li><a href="#summary">Summary</a></li>
+        
+        
+        
+          <li><a href="#functions_details">Functions</a></li>
+        
+        
+        
+      </ul>
+
+      
+
+      
+
+      
+        <h2 id="summary">Summary<span class="detail_header_links"><a class="to_top_link" href="#content" title="To the top of the page">&uarr;</a></span></h2>
+        <table class="summary">
+          <tr>
+  <td class="summary_signature"><a href="#compressed_public_key/1">compressed_public_key(pem)</a></td>
+  
+    <td class="summary_synopsis"><p>retrieves the compressed public key from a pem file</p>
+</td>
+  
+</tr>
+<tr>
+  <td class="summary_signature"><a href="#generate_pem/0">generate_pem()</a></td>
+  
+    <td class="summary_synopsis"><p>generates a pem file</p>
+</td>
+  
+</tr>
+<tr>
+  <td class="summary_signature"><a href="#get_sin_from_pem/1">get_sin_from_pem(pem)</a></td>
+  
+    <td class="summary_synopsis"><p>creates a base58 encoded SIN from a pem file</p>
+</td>
+  
+</tr>
+<tr>
+  <td class="summary_signature"><a href="#private_key/1">private_key(pem)</a></td>
+  
+    <td class="summary_synopsis"><p>retrieves the private key as a base16 string from the pem file</p>
+</td>
+  
+</tr>
+<tr>
+  <td class="summary_signature"><a href="#sign/2">sign(payload, pem)</a></td>
+  
+    <td class="summary_synopsis"><p>signs the input with the key retrieved from the pem file</p>
+</td>
+  
+</tr>
+
+        </table>
+      
+
+      
+
+      
+        <section id="functions_details" class="details_list">
+          <h2>Functions</h2>
+          <section class="detail">
+  <div class="detail_header" id="compressed_public_key/1">
+    <span class="signature"><strong>compressed_public_key(pem)</strong></span>
+    <div class="detail_header_links">
+      <span class="detail_type">(function)</span>
+      <a href="#compressed_public_key/1" class="detail_link" title="Link to this function">#</a>
+      <a class="to_top_link" href="#content" title="To the top of the page">&uarr;</a>
+    </div>
+  </div>
+  
+  <section class="docstring">
+    <p>retrieves the compressed public key from a pem file</p>
+
+  </section>
+  
+</section>
+<section class="detail">
+  <div class="detail_header" id="generate_pem/0">
+    <span class="signature"><strong>generate_pem()</strong></span>
+    <div class="detail_header_links">
+      <span class="detail_type">(function)</span>
+      <a href="#generate_pem/0" class="detail_link" title="Link to this function">#</a>
+      <a class="to_top_link" href="#content" title="To the top of the page">&uarr;</a>
+    </div>
+  </div>
+  
+  <section class="docstring">
+    <p>generates a pem file</p>
+
+  </section>
+  
+</section>
+<section class="detail">
+  <div class="detail_header" id="get_sin_from_pem/1">
+    <span class="signature"><strong>get_sin_from_pem(pem)</strong></span>
+    <div class="detail_header_links">
+      <span class="detail_type">(function)</span>
+      <a href="#get_sin_from_pem/1" class="detail_link" title="Link to this function">#</a>
+      <a class="to_top_link" href="#content" title="To the top of the page">&uarr;</a>
+    </div>
+  </div>
+  
+  <section class="docstring">
+    <p>creates a base58 encoded SIN from a pem file</p>
+
+  </section>
+  
+</section>
+<section class="detail">
+  <div class="detail_header" id="private_key/1">
+    <span class="signature"><strong>private_key(pem)</strong></span>
+    <div class="detail_header_links">
+      <span class="detail_type">(function)</span>
+      <a href="#private_key/1" class="detail_link" title="Link to this function">#</a>
+      <a class="to_top_link" href="#content" title="To the top of the page">&uarr;</a>
+    </div>
+  </div>
+  
+  <section class="docstring">
+    <p>retrieves the private key as a base16 string from the pem file</p>
+
+  </section>
+  
+</section>
+<section class="detail">
+  <div class="detail_header" id="sign/2">
+    <span class="signature"><strong>sign(payload, pem)</strong></span>
+    <div class="detail_header_links">
+      <span class="detail_type">(function)</span>
+      <a href="#sign/2" class="detail_link" title="Link to this function">#</a>
+      <a class="to_top_link" href="#content" title="To the top of the page">&uarr;</a>
+    </div>
+  </div>
+  
+  <section class="docstring">
+    <p>signs the input with the key retrieved from the pem file</p>
+
+  </section>
+  
+</section>
+
+        </section>
+      
+
+      
+
+      
+    </section>
+  </body>
+</html>
