@@ -20,7 +20,7 @@ defmodule PairingTest do
       raise ArgumentError, message: "Please set the system variables"
     else
       client = %WebClient{uri: root_url, pem: pem}
-      params = %{ price: 100, currency: "USD", token: set_token.pos }
+      params = %{ price: 10, currency: "USD", token: set_token.pos }
       invoice = WebClient.create_invoice(params, client) 
       assert invoice.status == "new"
     end
@@ -63,6 +63,7 @@ defmodule PairingTest do
   end
 
   defp get_code_from_server do
+    :timer.sleep(10000)
     root_url = System.get_env("RCROOTADDRESS")
     user_id = System.get_env("RCTESTUSER")
     user_password = System.get_env("RCTESTPASSWORD")
