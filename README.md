@@ -29,7 +29,7 @@ You'll need to know the pem file and the token in order to create invoices.
 
 Assuming that you have both a token object and a webclient as shown in the last step:
 
-    > webclient = %BitPay.WebClient{pem: pem}
+    > webclient = %BitPay.WebClient{pem: pem, uri: "https://test.bitpay.com"}
     > params = %{price: 100, currency: "USD", token: token.pos}
     > invoice = BitPay.WebClient.create_invoice(params, webclient)
 
