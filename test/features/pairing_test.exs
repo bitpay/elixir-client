@@ -45,9 +45,8 @@ defmodule PairingTest do
   end
 
   defp set_or_get_pem_and_token(root_url) do
-    user_home = Path.expand("~")
-    pem_path = user_home <> "/.bitpay/bitpay.pem"
-    token_path = user_home <> "/.bitpay/tokens.json"
+    pem_path = "./temp/bitpay.pem"
+    token_path = "./temp/tokens.json"
     if(File.exists?(pem_path) && File.exists?(token_path)) do
       pem = File.read(pem_path) |> elem(1)
       set_token = File.read(token_path) |> elem(1) |>
@@ -56,7 +55,7 @@ defmodule PairingTest do
       pem = KeyUtils.generate_pem
       set_token = pair_with_server(root_url, pem)
       token_json = JSX.encode(set_token) |> elem(1)
-      File.mkdir(user_home <> "/.bitpay")
+      File.mkdir("./temp")
       File.write(pem_path, pem)
       File.write(token_path, token_json)
     end
@@ -87,7 +86,7 @@ defmodule PairingTest do
       form = WebDriver.Session.element( :session, :id, "loginForm" )
       WebDriver.Element.submit (form)
       WebDriver.Session.element( :session, :css, ".dashboard-icon" )
-      WebDriver.Session.url :session, "https://test.bitpay.com/api-tokens"
+      WebDriver.Session.url :session, root_url <> "/api-tokens"
       iconplus = WebDriver.Session.element( :session, :css, ".icon-plus" )
       WebDriver.Element.click(iconplus)
       WebDriver.Session.element( :session, :tag, "button" )
