@@ -4,3 +4,4 @@ erl_crash.dump
 *.ez
 *.swp
 temp/*
+cacert.pem

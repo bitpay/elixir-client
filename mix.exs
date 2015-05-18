@@ -7,7 +7,8 @@ defmodule Client.Mixfile do
      elixir: "~> 1.0",
      description: description,
      package: package,
-     deps: deps]
+     deps: deps,
+     test_coverage: [tool: ExCoveralls]]
   end
 
   # Configuration for the OTP application
@@ -43,13 +44,14 @@ defmodule Client.Mixfile do
   end
 
   defp deps do
-    [{ :mock, "~> 0.1.0", only: :test }, 
+    [{ :mock, "~> 0.1.0", only: [:dev, :test] }, 
      { :ibrowse, github: "cmullaparthi/ibrowse", tag: "v4.1.0" },
      { :httpotion, "~> 1.0.0" }, 
      { :exjsx, "~> 3.1.0" },
      { :webdriver, github: "atlantaelixir/elixir-webdriver", tag: "v0.7.2" },
      { :uuid, "~> 0.1.5" },
      { :earmark, "~> 0.1", only: :dev },
-     {:ex_doc, "~> 0.7", only: :dev}]
+     { :ex_doc, "~> 0.7", only: :dev},
+     { :excoveralls, "~> 0.3", only: [:dev, :test]}]
   end
 end
