@@ -4,7 +4,7 @@
 [![Coveralls](https://img.shields.io/coveralls/bitpay/elixir-client.svg?style=flat-square)](https://coveralls.io/r/bitpay/elixir-client)
 
 # BitPay Library for Elixir or Erlang
-Powerful, flexible, lightweight interface to the BitPay Bitcoin Payment Gateway API. Can be used in an Elixir project or directly in an Erlang project as described in the [Elixir Crash Course](http://elixir-lang.org/crash-course.html). This README assumes that you are using Elixir.
+Powerful, flexible, lightweight interface to the BitPay Bitcoin Payment Gateway API. Can be used in an Elixir project or directly in an Erlang project as described in the [Elixir Crash Course](http://elixir-lang.org/crash-course.html). This document assumes that you are using Elixir.
 
 ## Installation
 
