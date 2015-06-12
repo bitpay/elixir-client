@@ -28,7 +28,7 @@ defmodule PairingTest do
 
   test 'retrieves an invoice' do
     invoice_id = "8qnKuf41s1791339gmwB3S"
-    client = %WebClient{uri: "https://test.bitpay.com"}
+    client = %WebClient{uri: System.get_env("RCROOTADDRESS")}
     invoice = WebClient.get_invoice(invoice_id, client)
     assert invoice.id == invoice_id
   end

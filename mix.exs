@@ -52,6 +52,7 @@ defmodule Client.Mixfile do
      { :uuid, "~> 0.1.5" },
      { :earmark, "~> 0.1", only: :dev },
      { :ex_doc, "~> 0.7", only: :dev},
-     { :excoveralls, "~> 0.3", only: [:dev, :test]}]
+     { :excoveralls, "~> 0.3", only: [:dev, :test]},
+     { :inch_ex, only: :docs }]
   end
 end

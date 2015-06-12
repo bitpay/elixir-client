@@ -8,6 +8,7 @@
   "httpotion": {:hex, :httpotion, "1.0.0"},
   "ibrowse": {:git, "git://github.com/cmullaparthi/ibrowse.git", "7871e2ebe8811efb64e1917e2de455fa87e8dfe3", [tag: "v4.1.0"]},
   "idna": {:hex, :idna, "1.0.1"},
+  "inch_ex": {:hex, :inch_ex, "0.3.1"},
   "jazz": {:hex, :jazz, "0.2.1"},
   "jsx": {:hex, :jsx, "2.4.0"},
   "meck": {:hex, :meck, "0.8.2"},
