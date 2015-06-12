@@ -39,7 +39,7 @@ defmodule BitPay.WebClient do
   def create_invoice params, webclient do
     validate_invoice_args params.price, params.currency
     uri = webclient.uri <> "/invoices"
-    body = JSX.encode(params) |> elem(1)
+    body = JSX.encode!(params)
     x_identity = KeyUtils.compressed_public_key webclient.pem
     x_signature = KeyUtils.sign(uri <> body, webclient.pem)
     response = post_to_server(uri, body, ["content-type": "application/json", "accept": "application/json", "X-accept-version": "2.0.0", "x-identity": x_identity, "x-signature": x_signature ])
@@ -93,8 +93,7 @@ defmodule BitPay.WebClient do
   defp pair_with_server code, webclient do
     uri = webclient.uri <> "/tokens"
     sin = KeyUtils.get_sin_from_pem(webclient.pem)
-    body = JSX.encode(["pairingCode": code, "id": sin]) |>
-           elem(1)
+    body = JSX.encode!(["pairingCode": code, "id": sin])
     post_to_server(uri, body, ["content-type": "application/json", "accept": "application/json", "X-accept-version": "2.0.0"])
   end
 

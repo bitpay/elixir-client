@@ -22,7 +22,7 @@ defmodule BitPay.KeyUtils do
   end
 
   @doc """
-  retrieves the compressed public key from a pem file
+  retrieves the compressed public key as a base 16 string from a pem file
   """
   def compressed_public_key pem do
     entity_from_pem(pem) |>
