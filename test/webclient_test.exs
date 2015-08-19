@@ -3,10 +3,36 @@ defmodule WebClientTest do
   alias BitPay.WebClient, as: WebClient
   import Mock
 
+  test 'post method does not try to get token if public facade input' do
+    client = %WebClient{}
+    with_mock HTTPotion, [post: fn("https://bitpay.com/testpoint", _body,  _headers) -> %HTTPotion.Response{status_code: 200, body: "{\"data\":[{\"policies\":[{\"policy\":\"id\",\"method\":\"unclaimed\",\"params\":[]}],\"resource\":\"4e2rQDFK6Y1X4eU5ugw8AYy9FFih6jRicv6dxeccgS8r\",\"token\":\"BHMA5LMxUdEvePuAaEPmuW5tPYbGpw65jirDHzbXLfkt\",\"facade\":\"pos\",\"dateCreated\":1440003119142,\"pairingExpiration\":1440089519142,\"pairingCode\":\"8GSQvjb\"}]}" } end] do
+      response = WebClient.post("testpoint", %{with_facade: :public}, client)
+      assert response.body.data |> List.first |> Access.get(:token) == "BHMA5LMxUdEvePuAaEPmuW5tPYbGpw65jirDHzbXLfkt"
+    end
+  end
+
+  test 'get_pairing_code makes a public call to the tokens endpoint' do
+    client = %WebClient{}
+    with_mock HTTPotion, [post: fn("https://bitpay.com/tokens", _body,  _headers) -> %HTTPotion.Response{status_code: 200, body: "{\"data\":[{\"policies\":[{\"policy\":\"id\",\"method\":\"unclaimed\",\"params\":[]}],\"resource\":\"4e2rQDFK6Y1X4eU5ugw8AYy9FFih6jRicv6dxeccgS8r\",\"token\":\"BHMA5LMxUdEvePuAaEPmuW5tPYbGpw65jirDHzbXLfkt\",\"facade\":\"pos\",\"dateCreated\":1440003119142,\"pairingExpiration\":1440089519142,\"pairingCode\":\"8GSQvjb\"}]}" } end] do
+      {:ok, pairingCode} = WebClient.get_pairing_code(client)
+      assert pairingCode == "8GSQvjb"
+    end
+  end
+
+  test 'post method gets specified token if input' do
+    client = %WebClient{}
+    with_mock HTTPotion, [get: fn("https://bitpay.com/tokens", _body, _headers) -> %HTTPotion.Response{status_code: 228, body: "{\"data\":[{\"testfacade\":\"EBtD6Dae9VXvK8ky7zYkCMfwZCzcsGsDiEfqmZB3Et9K\"},{\"pos/invoice\":\"ED2H47jWZbQKnPTwRLeZcfQ7eN9NyiRFVnRexmoWLScu\"}]}"} end, post: fn("https://bitpay.com/testpoint", _body,  _headers) -> %HTTPotion.Response{status_code: 200, body: "{\"data\":[{\"policies\":[{\"policy\":\"id\",\"method\":\"unclaimed\",\"params\":[]}],\"resource\":\"4e2rQDFK6Y1X4eU5ugw8AYy9FFih6jRicv6dxeccgS8r\",\"token\":\"BHMA5LMxUdEvePuAaEPmuW5tPYbGpw65jirDHzbXLfkt\",\"facade\":\"pos\",\"dateCreated\":1440003119142,\"pairingExpiration\":1440089519142,\"pairingCode\":\"8GSQvjb\"}]}" } end] do
+      response = WebClient.post("testpoint", %{with_facade: :testfacade}, client)
+      assert response.body.data |> List.first |> Access.get(:token) == "BHMA5LMxUdEvePuAaEPmuW5tPYbGpw65jirDHzbXLfkt"
+    end
+
+  end
+
   test 'get method' do
-    with_mock HTTPotion, [get: fn("https://bitpay.com/blocks", _body, _headers) ->
-        %HTTPotion.Response{status_code: 228, body: "{\"data\":[{\"pos\":\"EBtD6Dae9VXvK8ky7zYkCMfwZCzcsGsDiEfqmZB3Et9K\"},{\"pos/invoice\":\"ED2H47jWZbQKnPTwRLeZcfQ7eN9NyiRFVnRexmoWLScu\"}]}"} end] do
-        assert WebClient.get("blocks", %WebClient{}).status_code == 228 end end
+    with_mock HTTPotion, [get: fn("https://bitpay.com/blocks", _body, _headers) -> %HTTPotion.Response{status_code: 228, body: "{\"data\":[{\"pos\":\"EBtD6Dae9VXvK8ky7zYkCMfwZCzcsGsDiEfqmZB3Et9K\"},{\"pos/invoice\":\"ED2H47jWZbQKnPTwRLeZcfQ7eN9NyiRFVnRexmoWLScu\"}]}"} end] do 
+      assert WebClient.get("blocks", %WebClient{}).status == 228 
+    end 
+  end
 
   test 'pairing short circuits with invalid code' do
     illegal_pairing_codes() |> Enum.each fn(item) -> 

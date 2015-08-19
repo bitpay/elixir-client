@@ -6,3 +6,4 @@ erl_crash.dump
 temp/*
 cacert.pem
 *.beam
+.pem.data

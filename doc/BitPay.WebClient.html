@@ -70,6 +70,22 @@
   
 </tr>
 <tr>
+  <td class="summary_signature"><a href="#get/2">get(path, webclient)</a></td>
+  
+    <td class="summary_synopsis"><p>Generic Get method to the WebClient endpoint + path
+Input: </p>
+<ul>
+<li>the path (string)
+</li>
+<li>params for the request (as map)
+</li>
+<li>WebClient struct
+</li>
+</ul>
+</td>
+  
+</tr>
+<tr>
   <td class="summary_signature"><a href="#get_invoice/2">get_invoice(id, webclient)</a></td>
   
     <td class="summary_synopsis"><p>Retrieves an invoice from the BitPay server</p>
@@ -77,9 +93,32 @@
   
 </tr>
 <tr>
-  <td class="summary_signature"><a href="#pair_pos_client/2">pair_pos_client(code, client \\ %BitPay.WebClient{})</a></td>
+  <td class="summary_signature"><a href="#get_pairing_code/1">get_pairing_code(client)</a></td>
+  
+    <td class="summary_synopsis"><p>initiates a ‘client side’ pairing</p>
+</td>
+  
+</tr>
+<tr>
+  <td class="summary_signature"><a href="#pair_pos_client/2">pair_pos_client(code, client)</a></td>
   
     <td class="summary_synopsis"><p>creates a token on the server corresponding to the WebClients public and private keys</p>
+</td>
+  
+</tr>
+<tr>
+  <td class="summary_signature"><a href="#post/3">post(path, params, webclient)</a></td>
+  
+    <td class="summary_synopsis"><p>Generic post method to the WebClient endpoint + path
+Input:</p>
+<ul>
+<li>the path (string)
+</li>
+<li>params for the request (as map)
+</li>
+<li>WebClient struct
+</li>
+</ul>
 </td>
   
 </tr>
@@ -146,6 +185,33 @@
   
 </section>
 <section class="detail">
+  <div class="detail_header" id="get/2">
+    <span class="signature"><strong>get(path, webclient)</strong></span>
+    <div class="detail_header_links">
+      <span class="detail_type">(function)</span>
+      <a href="#get/2" class="detail_link" title="Link to this function">#</a>
+      <a class="to_top_link" href="#content" title="To the top of the page">&uarr;</a>
+    </div>
+  </div>
+  
+  <section class="docstring">
+    <p>Generic Get method to the WebClient endpoint + path
+Input: </p>
+<ul>
+<li>the path (string)
+</li>
+<li>params for the request (as map)
+</li>
+<li><p>WebClient struct</p>
+<p>  Response:
+  a map containing the response code, successe status as true or false, and the body of the http response</p>
+</li>
+</ul>
+
+  </section>
+  
+</section>
+<section class="detail">
   <div class="detail_header" id="get_invoice/2">
     <span class="signature"><strong>get_invoice(id, webclient)</strong></span>
     <div class="detail_header_links">
@@ -171,8 +237,27 @@
   
 </section>
 <section class="detail">
+  <div class="detail_header" id="get_pairing_code/1">
+    <span class="signature"><strong>get_pairing_code(client)</strong></span>
+    <div class="detail_header_links">
+      <span class="detail_type">(function)</span>
+      <a href="#get_pairing_code/1" class="detail_link" title="Link to this function">#</a>
+      <a class="to_top_link" href="#content" title="To the top of the page">&uarr;</a>
+    </div>
+  </div>
+  
+  <section class="docstring">
+    <p>initiates a ‘client side’ pairing.</p>
+<p>Input: a WebClient</p>
+<p>Response: <code class="inline">{:ok, &lt;pairingCode&gt; }</code></p>
+<p>The pairingCode can then be used at /dashboard/merchant/api-tokens to authenticate the token</p>
+
+  </section>
+  
+</section>
+<section class="detail">
   <div class="detail_header" id="pair_pos_client/2">
-    <span class="signature"><strong>pair_pos_client(code, client \\ %BitPay.WebClient{})</strong></span>
+    <span class="signature"><strong>pair_pos_client(code, client)</strong></span>
     <div class="detail_header_links">
       <span class="detail_type">(function)</span>
       <a href="#pair_pos_client/2" class="detail_link" title="Link to this function">#</a>
@@ -190,6 +275,33 @@
 </li>
 </ul>
 <p>Response: a key/value pair such as <code class="inline">%{pos: 92hgkeit92392gjgj}</code></p>
+
+  </section>
+  
+</section>
+<section class="detail">
+  <div class="detail_header" id="post/3">
+    <span class="signature"><strong>post(path, params, webclient)</strong></span>
+    <div class="detail_header_links">
+      <span class="detail_type">(function)</span>
+      <a href="#post/3" class="detail_link" title="Link to this function">#</a>
+      <a class="to_top_link" href="#content" title="To the top of the page">&uarr;</a>
+    </div>
+  </div>
+  
+  <section class="docstring">
+    <p>Generic post method to the WebClient endpoint + path
+Input:</p>
+<ul>
+<li>the path (string)
+</li>
+<li>params for the request (as map)
+</li>
+<li><p>WebClient struct</p>
+<p>  Response:
+  a map containing the response code, successe status as true or false, and the body of the http response</p>
+</li>
+</ul>
 
   </section>
   
