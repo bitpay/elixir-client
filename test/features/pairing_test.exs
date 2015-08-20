@@ -10,7 +10,7 @@ defmodule PairingTest do
     end
     client = %WebClient{pem: @pem, uri: @api}
     response = BitPay.WebClient.post("tokens", %{facade: "pos", with_facade: :merchant}, client).body.data |> List.first |> Access.get(:pairingCode) |> WebClient.pair_pos_client(client)
-    assert String.length(response.pos) == 44 
+    assert response.pos =~ ~r/^[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{20,44}$/
   end
 
   test 'initiates a client side pairing' do
