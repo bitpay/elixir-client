@@ -3,7 +3,7 @@ defmodule Client.Mixfile do
 
   def project do
     [app: :bitpay,
-     version: "0.0.1",
+     version: "0.2.4",
      elixir: "~> 1.0",
      description: description,
      package: package,
@@ -15,7 +15,7 @@ defmodule Client.Mixfile do
   #
   # Type `mix help compile.app` for more information
   def application do
-    [applications: [:logger, :httpotion, :exjsx, :webdriver, :uuid]]
+    [applications: [:logger, :httpotion, :exjsx, :uuid]]
   end
 
   # Dependencies can be Hex packages:
@@ -48,7 +48,6 @@ defmodule Client.Mixfile do
      { :ibrowse, github: "cmullaparthi/ibrowse", tag: "v4.1.0" },
      { :httpotion, "~> 1.0.0" }, 
      { :exjsx, "~> 3.1.0" },
-     { :webdriver, github: "atlantaelixir/elixir-webdriver", tag: "v0.7.2" },
      { :uuid, "~> 0.1.5" },
      { :earmark, "~> 0.1", only: :dev },
      { :ex_doc, "~> 0.7", only: :dev},
