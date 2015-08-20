@@ -51,12 +51,17 @@ API Documentation is available on the [BitPay site](https://bitpay.com/api).
 
 The tests depend on a custom fork of elixir-webdriver and require that you have phantomjs installed.
 
-Before running the tests, get a test.bitpay.com account. On Mac or Linux systems, set your system variables using the `set_constants` shell file in the test directory.
+Before running the tests, get a test.bitpay.com account. After this, you'll need to use the shell to approve a merchant token. Using `iex -S mix`:
+```iex
+(iex 1)> pem = BitPay.KeyUtils.generate_pem
+(iex 2)> api = "https://test.bitpay.com"
+(iex 3)> client = %BitPay.WebClient{pem: pem, uri: api}
+(iex 4)> {:ok, pairingCode} = BitPay.WebClient.get_pairing_code(client)
+```
 
-    $ source ./test/set_constants.sh https://test.bitpay.com <youremail> <yourpassword>
-    $ mix test
+Then log in to your dashboard and use the pairing code to create a "merchant" token. Once this is set, you'll need to create two environment variables, BITPAYPEM and BITPAYAPI, set to the values you used in the shell session. It's a good idea to save the pem to a file so that you can retrieve it later, the tests don't take care of that for you.
 
-The tests will attempt to create two files and a folder called `.bitpay` in your home (~) directory. This saves a pem file and token, which keeps the tests from having to pair twice every time they run, speeding up testing and avoiding BitPays token creation rate limiter. If you revoke the tokens or want a clean run, delete the files in this directory.
+Once that's done you should be able to run: `mix test` and see the tests run.
 
 ## Found a bug?
 Let us know! Send a pull request or a patch. Questions? Ask! We're here to help. We will respond to all filed issues.
