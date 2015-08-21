@@ -55,12 +55,11 @@ defmodule BitPay.WebClient do
   Response: A map corresponding to the data section of the JSON response from the server.
   """
   def create_invoice params, webclient do
-    validate_price(params.price, params.currency) |>
-    validate_currency(params.currency) |>
-    check_tokens(params, webclient) |>
-    create_invoice_with_valid_params(params, webclient)
+    validate_price(params.price, params.currency)
+    |> validate_currency(params.currency)
+    |> post("invoices", params, webclient)
+    |> process_data
   end
-
 
   @doc """
   Retrieves an invoice from the BitPay server.
@@ -74,10 +73,10 @@ defmodule BitPay.WebClient do
     a map corresponding to the data section of the JSON response from the server.
   """
   def get_invoice(id, webclient) do
-    uri = webclient.uri <> "/invoices/" <> id
-    response = HTTPotion.get(uri) |>
-               parse_response
-    process_data response.body, response.status, response.success
+    "#{webclient.uri}/invoices/#{id}"
+    |> HTTPotion.get
+    |> parse_response
+    |> process_data
   end
 
   @doc """
@@ -108,10 +107,12 @@ defmodule BitPay.WebClient do
     Response:
     a map containing the response code, successe status as true or false, and the body of the http response
   """
+  def post({:error, message}, _, _, _), do: {:error, message}
+  def post({:ok, _}, path, params, webclient), do: post(path, params, webclient)
   def post path, params, webclient do
-    check_tokens({:ok, "first in pipe"}, params, webclient) |>
-    build_post(path, params, webclient) |>
-    post_to_server
+    check_tokens({:ok, "first in pipe"}, params, webclient)
+    |> build_post(path, params, webclient)
+    |> post_to_server
   end
 
   defp build_post({:ok, %{token: token}}, path, params, webclient) do
@@ -134,19 +135,10 @@ defmodule BitPay.WebClient do
 
   defp pair_pos_client(_code, false, _client), do: {:error, "pairing code is not legal"}
   defp pair_pos_client code, true, client do
-    response = pair_with_server code, client 
-    process_pairing response.body, response.status, response.success
+    post("tokens", %{with_facade: :public, pairingCode: code}, client)
+    |> process_data
+    |> extract_facade
   end
-
-
-  defp process_pairing body, _status, true do
-    data = body.data |> List.first
-    token = data.token
-    facade = String.to_atom(data.facade)
-    Dict.put(%{}, facade, token)
-  end
-  defp process_pairing(body, status, false), do: process_response(body, status, false)
-
 
   defp check_tokens({:error, message}, _, _), do: {:error, message}
   defp check_tokens({:ok, _}, %{token: _token}, _webclient), do: {:ok, "token passed in"}
@@ -167,31 +159,29 @@ defmodule BitPay.WebClient do
 
   defp extract_token({:error, message}), do: {:error, message}
   defp extract_token({:ok, data}) do
-    Enum.map(data, fn(item) -> item[:pos] || item[:merchant] end) |>
-    Enum.filter(fn(i)->i end) |>
-    select_token    
+    Enum.map(data, fn(item) -> item[:pos] || item[:merchant] end)
+    |> filter_token
   end
   defp extract_token({:ok, data}, facade) do
-    Enum.map(data, fn(item) -> item[facade] end) |>
-    Enum.filter(fn(i)->i end) |>
-    select_token    
+    Enum.map(data, fn(item) -> item[facade] end)
+    |> filter_token
+  end
+
+  defp filter_token(tokens) do
+    Enum.filter(tokens, fn(i)->i end)
+    |> select_token
+  end
+
+  defp extract_facade({:error, message}), do: {:error, message}
+  defp extract_facade({:ok, data}) do
+    data = data |> List.first
+    Dict.put(%{}, data.facade |> String.to_atom, data.token)
   end
 
   defp select_token([]), do: {:error, "no merchant or pos tokens on server"}
   defp select_token(tokens), do: {:ok, %{token: Enum.at(tokens, 0)}}
 
-  defp create_invoice_with_valid_params({:error, error}, _params, _webclient ), do: {:error, error}
-  defp create_invoice_with_valid_params({:ok, %{token: token}}, params, webclient) do
-    params = Map.merge(params, %{token: token})
-    create_invoice_with_valid_params({:ok, "token added to params"}, params, webclient)
-  end
-  defp create_invoice_with_valid_params({:ok, _}, params, webclient) do
-    uri = webclient.uri <> "/invoices"
-    body = JSX.encode(params) |> elem(1)
-    response = post_to_server(uri, body, signed_headers(uri <> body, webclient.pem))
-    process_data response.body, response.status, response.success
-  end
-
+  defp process_data({:error, message}), do: {:error, message}
   defp process_data(%{body: body, status: status, success: success}), do: process_data(body, status, success)
   defp process_data(body, _status, true), do: {:ok, body.data}
   defp process_data(body, status, false), do: process_response(body, status, false)
@@ -199,14 +189,6 @@ defmodule BitPay.WebClient do
   defp process_response body, status, false do
     message = body.error
     {:error, "#{status}: #{message}"}
-  end
-
-  defp pair_with_server code, webclient do
-    uri = webclient.uri <> "/tokens"
-    sin = KeyUtils.get_sin_from_pem(webclient.pem)
-    body = JSX.encode(["pairingCode": code, "id": sin]) |>
-           elem(1)
-    post_to_server(uri, body, [])
   end
 
   defp post_to_server({:error, message}), do: {:error, message}

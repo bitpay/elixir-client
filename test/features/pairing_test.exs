@@ -5,6 +5,7 @@ defmodule PairingTest do
   @api System.get_env["BITPAYAPI"]
 
   test 'pairs with the server' do
+    :timer.sleep(5000)
     if(is_nil(System.get_env["BITPAYAPI"])) do
       raise ArgumentError, message: "Please set the system variables"
     end
