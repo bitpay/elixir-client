@@ -19,6 +19,13 @@ defmodule WebClientTest do
     end
   end
 
+  test 'get_pairing_code accepts "merchant" or "pos" arguments' do
+    client = %WebClient{}
+    with_mock HTTPotion, [post: fn("https://bitpay.com/tokens", _body,  _headers) -> %HTTPotion.Response{status_code: 200, body: "{\"data\":[{\"policies\":[{\"policy\":\"id\",\"method\":\"unclaimed\",\"params\":[]}],\"resource\":\"4e2rQDFK6Y1X4eU5ugw8AYy9FFih6jRicv6dxeccgS8r\",\"token\":\"BHMA5LMxUdEvePuAaEPmuW5tPYbGpw65jirDHzbXLfkt\",\"facade\":\"pos\",\"dateCreated\":1440003119142,\"pairingExpiration\":1440089519142,\"pairingCode\":\"8GSQvjb\"}]}" } end] do
+      {:ok, pairingCode} = WebClient.get_pairing_code(client, :merchant)
+      assert pairingCode == "8GSQvjb"
+    end
+  end
   test 'post method gets specified token if input' do
     client = %WebClient{}
     with_mock HTTPotion, [get: fn("https://bitpay.com/tokens", _body, _headers) -> %HTTPotion.Response{status_code: 228, body: "{\"data\":[{\"testfacade\":\"EBtD6Dae9VXvK8ky7zYkCMfwZCzcsGsDiEfqmZB3Et9K\"},{\"pos/invoice\":\"ED2H47jWZbQKnPTwRLeZcfQ7eN9NyiRFVnRexmoWLScu\"}]}"} end, post: fn("https://bitpay.com/testpoint", _body,  _headers) -> %HTTPotion.Response{status_code: 200, body: "{\"data\":[{\"policies\":[{\"policy\":\"id\",\"method\":\"unclaimed\",\"params\":[]}],\"resource\":\"4e2rQDFK6Y1X4eU5ugw8AYy9FFih6jRicv6dxeccgS8r\",\"token\":\"BHMA5LMxUdEvePuAaEPmuW5tPYbGpw65jirDHzbXLfkt\",\"facade\":\"pos\",\"dateCreated\":1440003119142,\"pairingExpiration\":1440089519142,\"pairingCode\":\"8GSQvjb\"}]}" } end] do

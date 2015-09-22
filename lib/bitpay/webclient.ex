@@ -41,6 +41,12 @@ defmodule BitPay.WebClient do
     |> extract_pairing_code
   end
 
+  def get_pairing_code client, facade do
+    post("tokens", %{with_facade: :public, facade: facade}, client)
+    |> process_data
+    |> extract_pairing_code
+  end
+
   defp extract_pairing_code({:error, message}), do: {:error, message}
   defp extract_pairing_code({:ok, data}), do: data |> List.first |> Access.get(:pairingCode) |> (&({:ok, &1})).()
 
